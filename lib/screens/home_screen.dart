@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Cigaratte cigaraManager;
+  Cigaratte? cigaraManager;
   String lang = "";
   String currency = "";
   String tiptext = "";
@@ -34,12 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> loadData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    currency = pref.getString("currency");
+    currency = pref.getString("currency")!;
 
     cigaraManager = Cigaratte(
-        dailyCigarattes: pref.getInt("dailycigarattes"),
-        pricePerCigaratte: pref.getDouble("pricePerCigaratte"),
-        startDate: DateTime.parse(pref.getString("startTime")));
+        dailyCigarattes: pref.getInt("dailycigarattes")!,
+        pricePerCigaratte: pref.getDouble("pricePerCigaratte")!,
+        startDate: DateTime.parse(pref.getString("startTime")!),
+        lang: '');
   }
 
   int lastRndInt = -1;
@@ -164,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 CustomPaint(
                   painter: ProgressPainter(
-                    completedPercentage: cigaraManager.getdayPercentage,
+                    completedPercentage: cigaraManager!.getdayPercentage,
                     circleWidth: 15,
                     defaultCircleColor: Colors.lightGreen,
                     percentageCompletedCircleColor:
@@ -175,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${cigaraManager.getdayPercentage.toStringAsFixed(1)}%',
+                          '${cigaraManager!.getdayPercentage.toStringAsFixed(1)}%',
                           style: TextStyle(
                               fontSize: getProportionateScreenWidth(52),
                               fontWeight: FontWeight.bold,
@@ -186,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ]),
                         ),
                         Text(
-                          '${langs[lang]["home"]["day"].toUpperCase()} ${cigaraManager.calculatePassedTime().inDays + 1}',
+                          '${langs[lang]["home"]["day"].toUpperCase()} ${cigaraManager!.calculatePassedTime().inDays + 1}',
                           style: TextStyle(
                             fontSize: getProportionateScreenWidth(26),
                             fontWeight: FontWeight.bold,
@@ -231,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     id: "wallet", onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return WalletScreen(
-                      cigaratteManager: cigaraManager,
+                      cigaratteManager: cigaraManager!,
                     );
                   }));
                 }),
@@ -245,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     id: "progress", onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return ProgressPage(
-                      cigaratteManager: cigaraManager,
+                      cigaratteManager: cigaraManager!,
                     );
                   }));
                 }),
@@ -259,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     id: "guide", onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return GuideScreen(
-                      cigaratteManager: cigaraManager,
+                      cigaratteManager: cigaraManager!,
                     );
                   }));
                 }),
@@ -305,17 +306,17 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => showAlertDialog(context),
           ),
           Text(
-            "${_converToText(cigaraManager.calculatePassedTime(), cigaraManager.upcomingEvent["time"])}",
+            "${_converToText(cigaraManager!.calculatePassedTime(), cigaraManager!.upcomingEvent["time"])}",
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(fontSize: getProportionateScreenWidth(18)),
+                ?.copyWith(fontSize: getProportionateScreenWidth(18)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: AutoSizeText(
-              "${langs[lang]["progressDescription"][cigaraManager.upcomingEvent["id"]]}",
+              "${langs[lang]["progressDescription"][cigaraManager!.upcomingEvent["id"]]}",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
               maxLines: 2,
@@ -327,19 +328,19 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 buildInfoCard(
                     context,
-                    "${cigaraManager.calculatePassedTime().inDays} ${langs[lang]["home"]["day"].toLowerCase()}, ${cigaraManager.calculatePassedTime().inHours % 24} ${langs[lang]["home"]["hour"].toLowerCase()}, ${cigaraManager.calculatePassedTime().inMinutes % 60} ${langs[lang]["home"]["minute"].toLowerCase()}, ${cigaraManager.calculatePassedTime().inSeconds % 60} ${langs[lang]["home"]["second"].toLowerCase()}",
+                    "${cigaraManager!.calculatePassedTime().inDays} ${langs[lang]["home"]["day"].toLowerCase()}, ${cigaraManager!.calculatePassedTime().inHours % 24} ${langs[lang]["home"]["hour"].toLowerCase()}, ${cigaraManager!.calculatePassedTime().inMinutes % 60} ${langs[lang]["home"]["minute"].toLowerCase()}, ${cigaraManager!.calculatePassedTime().inSeconds % 60} ${langs[lang]["home"]["second"].toLowerCase()}",
                     "${langs[lang]["home"]["timePassed"]}",
                     Icons.timer,
                     Colors.teal),
                 buildInfoCard(
                     context,
-                    "${NumberFormat.currency(symbol: currency).format(cigaraManager.getSavedMoney)}",
+                    "${NumberFormat.currency(symbol: currency).format(cigaraManager!.getSavedMoney)}",
                     "${langs[lang]["home"]["moneyEarned"]}",
                     Icons.account_balance_wallet,
                     Colors.green),
                 buildInfoCard(
                     context,
-                    "${NumberFormat("#,###").format(cigaraManager.getsavedCigarattes.round())}",
+                    "${NumberFormat("#,###").format(cigaraManager!.getsavedCigarattes.round())}",
                     "${langs[lang]["home"]["cigarratesnotsmoked"]}",
                     Icons.smoke_free,
                     Colors.red)
@@ -357,12 +358,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Row buildBottom() {
-    int days = cigaraManager.calculatePassedTime().inDays;
+    int days = cigaraManager!.calculatePassedTime().inDays;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        for (int i in cigaraManager.generateDayItem)
+        for (int i in cigaraManager!.generateDayItem)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -376,8 +377,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               buildDayItem(
                   count: i % 365,
-                  checked: cigaraManager.calculatePassedTime().inDays + 1 > i,
-                  current: cigaraManager.calculatePassedTime().inDays + 1 == i),
+                  checked: cigaraManager!.calculatePassedTime().inDays + 1 > i,
+                  current:
+                      cigaraManager!.calculatePassedTime().inDays + 1 == i),
               SizedBox(
                 width: getProportionateScreenWidth(days > 100
                     ? 3
@@ -401,7 +403,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return "";
   }
 
-  Column buildDayItem({int count, bool checked, bool current}) {
+  Column buildDayItem(
+      {required int count, required bool checked, required bool current}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -459,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: Theme.of(context).primaryIconTheme.color,
+                color: Theme.of(context).primaryIconTheme.color!,
               ),
               color: Theme.of(context).backgroundColor,
               boxShadow: [
@@ -479,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: getProportionateScreenWidth(150),
                     child: AutoSizeText(
                       title,
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
                           fontSize: getProportionateScreenWidth(16),
                           color: color),
                       maxLines: 2,
@@ -494,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 5),
               AutoSizeText(
                 text,
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: getProportionateScreenWidth(14)),
                 maxLines: 2,
@@ -507,7 +510,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   InkWell buildCategoryCard(Size sc, BuildContext context,
-      {Color color, IconData icon, String text, String id, Function onTap}) {
+      {required Color color,
+      required IconData icon,
+      required String text,
+      required String id,
+      required Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Ink(
@@ -515,7 +522,7 @@ class _HomeScreenState extends State<HomeScreen> {
             horizontal: 10, vertical: getProportionateScreenHeight(15)),
         decoration: BoxDecoration(
             border: Border.all(
-              color: Theme.of(context).primaryIconTheme.color,
+              color: Theme.of(context).primaryIconTheme.color!,
             ),
             borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).backgroundColor,
@@ -546,7 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               AutoSizeText(
                 text,
-                style: Theme.of(context).textTheme.headline4.copyWith(
+                style: Theme.of(context).textTheme.headline4?.copyWith(
                     color: color,
                     fontSize: getProportionateScreenWidth(20),
                     fontWeight: FontWeight.w600),

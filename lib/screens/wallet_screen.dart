@@ -16,7 +16,7 @@ import '../size_config.dart';
 
 class WalletScreen extends StatefulWidget {
   final Cigaratte cigaratteManager;
-  WalletScreen({Key key, this.cigaratteManager}) : super(key: key);
+  WalletScreen({Key? key, required this.cigaratteManager}) : super(key: key);
 
   @override
   _WalletScreenState createState() => _WalletScreenState();
@@ -41,7 +41,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   _getTransactions() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    currency = pref.getString("currency");
+    currency = pref.getString("currency")!;
     var tr = jsonDecode((pref.getString("transactionData") ?? "[]"));
     for (var e in tr) {
       trlist.add(Transaction(
@@ -54,7 +54,10 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   _addTransaction(
-      {DateTime date, double price, String title, String description}) {
+      {required DateTime date,
+      required double price,
+      required String title,
+      required String description}) {
     if (price > currentBalance) return;
     trlist.insert(
         0,
@@ -79,7 +82,7 @@ class _WalletScreenState extends State<WalletScreen> {
     pref.setString("transactionData", jsonEncode(lister));
   }
 
-  Timer statetimer;
+  late Timer statetimer;
   @override
   void initState() {
     lang = getLang();
@@ -97,7 +100,7 @@ class _WalletScreenState extends State<WalletScreen> {
     super.dispose();
   }
 
-  String _tsdescription;
+  late String _tsdescription;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -106,7 +109,7 @@ class _WalletScreenState extends State<WalletScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (!_sheetopen)
-            scaffoldState.currentState.showBottomSheet((context) => Container(
+            scaffoldState.currentState!.showBottomSheet((context) => Container(
                   padding: EdgeInsets.all(15),
                   color: Colors.white,
                   height: getProportionateScreenHeight(340),
@@ -117,7 +120,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          .copyWith(fontSize: getProportionateScreenWidth(22)),
+                          ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                     ),
                     TextField(
                       onChanged: (value) => _tstitle = value,
@@ -127,7 +130,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          .copyWith(fontSize: getProportionateScreenWidth(22)),
+                          ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                     ),
                     TextField(
                       onChanged: (value) => _tsdescription = value,
@@ -137,7 +140,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          .copyWith(fontSize: getProportionateScreenWidth(22)),
+                          ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                     ),
                     TextField(
                       onChanged: (value) =>
@@ -150,7 +153,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          .copyWith(fontSize: getProportionateScreenWidth(22)),
+                          ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                     ),
                     ElevatedButton(
                       style: TextButton.styleFrom(
@@ -189,7 +192,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 children: [
                   Text(
                     "${langs[lang]["wallet"]["balance"]}",
-                    style: Theme.of(context).textTheme.headline4.copyWith(
+                    style: Theme.of(context).textTheme.headline1?.copyWith(
                         color: Colors.white.withAlpha(240),
                         fontWeight: FontWeight.w300),
                     textAlign: TextAlign.center,
@@ -198,7 +201,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: AutoSizeText(
                       "${NumberFormat.currency(symbol: currency).format(currentBalance)}",
-                      style: Theme.of(context).textTheme.headline4.copyWith(
+                      style: Theme.of(context).textTheme.headline1?.copyWith(
                           color: Colors.white,
                           fontSize: getProportionateScreenWidth(42)),
                       textAlign: TextAlign.center,
@@ -213,7 +216,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
-                                  .copyWith(
+                                  ?.copyWith(
                                       color: Colors.white.withAlpha(200),
                                       fontWeight: FontWeight.w300,
                                       fontSize:
@@ -225,7 +228,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
-                                  .copyWith(
+                                  ?.copyWith(
                                       color: Colors.white.withAlpha(200),
                                       fontWeight: FontWeight.w300,
                                       fontSize:
@@ -237,7 +240,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
-                                  .copyWith(
+                                  ?.copyWith(
                                       color: Colors.white.withAlpha(200),
                                       fontWeight: FontWeight.w300,
                                       fontSize:
@@ -249,7 +252,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
-                                  .copyWith(
+                                  ?.copyWith(
                                       color: Colors.white.withAlpha(200),
                                       fontWeight: FontWeight.w300,
                                       fontSize:
@@ -366,7 +369,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline4
-                                      .copyWith(
+                                      ?.copyWith(
                                           color: Colors.white,
                                           fontSize:
                                               getProportionateScreenWidth(22)),
@@ -379,7 +382,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4
-                                        .copyWith(
+                                        ?.copyWith(
                                             color: Colors.grey[100],
                                             fontSize:
                                                 getProportionateScreenWidth(
@@ -390,7 +393,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline4
-                                      .copyWith(
+                                      ?.copyWith(
                                           color: Colors.white70,
                                           fontSize:
                                               getProportionateScreenWidth(16)),
@@ -405,7 +408,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline4
-                                      .copyWith(
+                                      ?.copyWith(
                                           color: Colors.white,
                                           fontSize:
                                               getProportionateScreenWidth(25)),
@@ -450,7 +453,7 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
           Text(
             "${langs[lang]["home"]["wallet"]}",
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 color: Colors.white, fontSize: getProportionateScreenWidth(26)),
           )
         ],
@@ -466,5 +469,9 @@ class Transaction {
   final String description;
   get toJson =>
       {"price": price, "time": time.toIso8601String(), "title": title};
-  Transaction({this.price, this.time, this.title, this.description = ""});
+  Transaction(
+      {required this.price,
+      required this.time,
+      required this.title,
+      this.description = ""});
 }

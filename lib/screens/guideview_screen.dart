@@ -6,7 +6,8 @@ import 'package:quitsmoke/size_config.dart';
 import 'package:quitsmoke/static/lang.dart';
 
 class GuideViewScreen extends StatefulWidget {
-  GuideViewScreen({Key key, this.id, this.lang}) : super(key: key);
+  GuideViewScreen({Key? key, required this.id, required this.lang})
+      : super(key: key);
   final String id;
   final String lang;
   @override
@@ -54,7 +55,7 @@ class _GuideViewScreenState extends State<GuideViewScreen> {
                 ),
                 AutoSizeText(
                   "${actual["title"]}",
-                  style: Theme.of(context).textTheme.headline3.copyWith(
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
                       color: Colors.black,
                       fontSize: getProportionateScreenWidth(26)),
                   maxLines: 2,
@@ -112,7 +113,7 @@ class _GuideViewScreenState extends State<GuideViewScreen> {
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(fontSize: getProportionateScreenWidth(26)),
+                ?.copyWith(fontSize: getProportionateScreenWidth(26)),
             textAlign: TextAlign.left,
           ),
           new Divider(
@@ -121,7 +122,7 @@ class _GuideViewScreenState extends State<GuideViewScreen> {
           text[0].length == 1
               ? Text(
                   "$text",
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
                       fontSize: getProportionateScreenWidth(22),
                       color: Colors.black.withOpacity(.8)),
                   textAlign: TextAlign.left,
@@ -136,7 +137,7 @@ class _GuideViewScreenState extends State<GuideViewScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1
-                                .copyWith(
+                                ?.copyWith(
                                     fontSize: getProportionateScreenWidth(22),
                                     color: Colors.black.withOpacity(.8)),
                             textAlign: TextAlign.left,

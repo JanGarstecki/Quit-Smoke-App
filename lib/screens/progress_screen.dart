@@ -13,7 +13,7 @@ import '../size_config.dart';
 
 class ProgressPage extends StatefulWidget {
   final Cigaratte cigaratteManager;
-  ProgressPage({Key key, this.cigaratteManager}) : super(key: key);
+  ProgressPage({Key? key, required this.cigaratteManager}) : super(key: key);
 
   @override
   _ProgressPageState createState() => _ProgressPageState();
@@ -21,7 +21,7 @@ class ProgressPage extends StatefulWidget {
 
 class _ProgressPageState extends State<ProgressPage> {
   String lang = "";
-  Timer statetimer;
+  late Timer statetimer;
   @override
   void initState() {
     super.initState();
@@ -87,7 +87,7 @@ class _ProgressPageState extends State<ProgressPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2
-                                        .copyWith(
+                                        ?.copyWith(
                                             color: Colors.white,
                                             fontSize:
                                                 getProportionateScreenWidth(
@@ -101,7 +101,7 @@ class _ProgressPageState extends State<ProgressPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4
-                                        .copyWith(
+                                        ?.copyWith(
                                             color: Colors.white,
                                             fontSize:
                                                 getProportionateScreenWidth(
@@ -180,7 +180,7 @@ class _ProgressPageState extends State<ProgressPage> {
           ),
           Text(
             "${langs[lang]["home"]["progress"]}",
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
                 color: Colors.white, fontSize: getProportionateScreenWidth(26)),
           )
         ],

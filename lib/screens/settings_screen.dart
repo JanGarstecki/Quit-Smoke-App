@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../size_config.dart';
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -19,11 +19,11 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   String lang = "";
-  int dailyCigarattes;
-  double pricePerCigaratte;
-  String currency;
-  TextEditingController controllerday;
-  TextEditingController controllercost;
+  late int dailyCigarattes;
+  late double pricePerCigaratte;
+  late String currency;
+  late TextEditingController controllerday;
+  late TextEditingController controllercost;
 
   @override
   void initState() {
@@ -36,10 +36,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> loadData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    dailyCigarattes = pref.getInt("dailycigarattes");
-    pricePerCigaratte = pref.getDouble("pricePerCigaratte");
-    currency = pref.getString("currency");
-    stopDate = DateTime.parse(pref.getString("startTime"));
+    dailyCigarattes = pref.getInt("dailycigarattes")!;
+    pricePerCigaratte = pref.getDouble("pricePerCigaratte")!;
+    currency = pref.getString("currency")!;
+    stopDate = DateTime.parse(pref.getString("startTime")!);
 
     controllerday.text = dailyCigarattes.toString();
     controllercost.text = pricePerCigaratte.toString();
@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      .copyWith(fontSize: getProportionateScreenWidth(26)),
+                      ?.copyWith(fontSize: getProportionateScreenWidth(26)),
                 ),
                 items: currencyList.map((Map value) {
                   return DropdownMenuItem<String>(
@@ -119,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   );
                 }).toList(),
                 onChanged: (p) {
-                  currency = p;
+                  currency = p!;
                   setState(() {});
                 },
               ),
@@ -142,14 +142,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SizedBox(
                   width: 10,
                 ),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 50), child:
-                  OutlinedButton(
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: OutlinedButton(
                     onPressed: () => _pickDate(context),
                     child: Text(
                       "${langs[lang]["settings"]["change"]}",
                       textAlign: TextAlign.center,
                     ),
-                    style: OutlinedButton.styleFrom(side: BorderSide(color: Theme.of(context).primaryColor, width: 2)),
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2)),
                   ),
                 ),
               ],
@@ -157,11 +160,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Expanded(
               child: Text(""),
             ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 50), child:
-              OutlinedButton(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              child: OutlinedButton(
                 onPressed: () => saveData(),
                 child: Text(langs[lang]["settings"]["save"]),
-                style: OutlinedButton.styleFrom(side: BorderSide(color: Theme.of(context).primaryColor, width: 2)),
+                style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                        color: Theme.of(context).primaryColor, width: 2)),
               ),
             ),
           ],
@@ -170,17 +176,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  DateTime stopDate;
+  late DateTime stopDate;
 
   _pickDate(BuildContext context) async {
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       firstDate: DateTime(DateTime.now().year - 5),
       lastDate: DateTime.now(),
       initialDate: stopDate,
     );
 
-    TimeOfDay t =
+    TimeOfDay? t =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (date != null && t != null)
       setState(() {
@@ -214,7 +220,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           Text(
             "${langs[lang]["home"]["settings"]}",
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 color: Colors.black, fontSize: getProportionateScreenWidth(26)),
           )
         ],

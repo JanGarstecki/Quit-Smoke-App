@@ -7,16 +7,16 @@ import 'package:quitsmoke/comps/getlang.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReasonScreen extends StatefulWidget {
-  ReasonScreen({Key key}) : super(key: key);
+  ReasonScreen({Key? key}) : super(key: key);
 
   @override
   _ReasonScreenState createState() => _ReasonScreenState();
 }
 
 class _ReasonScreenState extends State<ReasonScreen> {
-  String lang;
+  late String lang;
 
-  List<String> reasons;
+  late List<String> reasons;
 
   void initState() {
     loadReasons();
@@ -26,7 +26,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
 
   void loadReasons() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String _reasons = pref.getString("reason");
+    String _reasons = pref.getString("reason")!;
     if (!_reasons.startsWith("[")) {
       reasons = [_reasons];
       pref.setString("reason", jsonEncode(reasons));
@@ -64,7 +64,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
           ),
           Text(
             "${langs[lang]["home"]["reason"]}",
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
                 color: Colors.white, fontSize: getProportionateScreenWidth(26)),
           )
         ],
@@ -94,7 +94,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
               child: Center(
                 child: Text("${langs[lang]["reason"]["somegoodreasons"]}",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline4.copyWith(
+                    style: Theme.of(context).textTheme.headline4?.copyWith(
                         color: Colors.white.withAlpha(200),
                         fontWeight: FontWeight.w300,
                         fontSize: getProportionateScreenWidth(36))),
@@ -123,7 +123,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
     return FloatingActionButton(
       onPressed: () {
         if (!_sheetopen)
-          scaffoldState.currentState.showBottomSheet((context) => Container(
+          scaffoldState.currentState?.showBottomSheet((context) => Container(
                 padding: EdgeInsets.all(15),
                 color: Colors.white,
                 height: getProportionateScreenHeight(250),
@@ -134,7 +134,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .headline4
-                        .copyWith(fontSize: getProportionateScreenWidth(22)),
+                        ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                   ),
                   Divider(),
                   TextField(
@@ -146,7 +146,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .headline4
-                        .copyWith(fontSize: getProportionateScreenWidth(22)),
+                        ?.copyWith(fontSize: getProportionateScreenWidth(22)),
                   ),
                   ElevatedButton(
                     style: TextButton.styleFrom(
@@ -220,7 +220,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
             boxShadow: [
               BoxShadow(
                   blurRadius: 10,
-                  color: Colors.deepPurple[600],
+                  color: Colors.deepPurple[600]!,
                   spreadRadius: 2,
                   offset: Offset(3, 2))
             ],
@@ -230,7 +230,7 @@ class _ReasonScreenState extends State<ReasonScreen> {
           children: [
             Flexible(
               child: Text("${reasons[index]}",
-                  style: Theme.of(context).textTheme.headline4.copyWith(
+                  style: Theme.of(context).textTheme.headline4?.copyWith(
                       color: Colors.white.withAlpha(200),
                       fontWeight: FontWeight.w300,
                       fontSize: getProportionateScreenWidth(21))),

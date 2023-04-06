@@ -9,11 +9,11 @@ class ParticlePainter extends CustomPainter {
   int sprayRadius = 100;
 
   ParticleSpawner particles;
-  Rect _area;
-  Paint mPaint;
-  Paint bgPaint;
+  late Rect _area;
+  late Paint mPaint;
+  late Paint bgPaint;
 
-  ParticlePainter({this.particleCount, this.particles})
+  ParticlePainter({required this.particleCount, required this.particles})
       : super(repaint: particles) {
     mPaint = new Paint();
     bgPaint = new Paint()..color = Color.fromARGB(120, 145, 132, 245);
@@ -37,26 +37,26 @@ class ParticlePainter extends CustomPainter {
     final random = Random();
     canvas.drawOval(
         Rect.fromLTWH(particle.x, particle.y, particle.r, particle.r),
-        Paint()..color = particle.color);
+        Paint()..color = particle.color!);
   }
 }
 
 class Particle {
-  double vX;
-  double vY;
+  late double vX;
+  late double vY;
 
-  double x;
-  double y;
+  late double x;
+  late double y;
   double r = 3;
-  final Color color;
+  final Color? color;
 
   Particle(
-      {double xval,
-      double yval,
-      double avalX,
-      double avalY,
-      double vvalX,
-      double vvalY,
+      {required double xval,
+      required double yval,
+      double? avalX,
+      double? avalY,
+      required double vvalX,
+      required double vvalY,
       this.color}) {
     x = xval;
     y = yval;

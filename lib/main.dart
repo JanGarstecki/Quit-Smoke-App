@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -15,11 +14,7 @@ import 'package:timezone/timezone.dart' as tz;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await _configureLocalTimeZone();
-
-  Intl.defaultLocale = Platform.localeName;
-  initializeDateFormatting(Platform.localeName, null);
-  NotificationManager.initializeLocalNotifiations();
+  await prepare();
 
   runApp(MyApp());
 
@@ -27,6 +22,14 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+}
+
+Future<void> prepare() async {
+  await _configureLocalTimeZone();
+
+  Intl.defaultLocale = Platform.localeName;
+  initializeDateFormatting(Platform.localeName, null);
+  NotificationManager.initializeLocalNotifiations();
 }
 
 Future<void> _configureLocalTimeZone() async {
@@ -46,14 +49,14 @@ class MyApp extends StatelessWidget {
 
         if (!currentFocus.hasPrimaryFocus &&
             currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus.unfocus();
+          FocusManager.instance.primaryFocus!.unfocus();
         }
       },
       child: MaterialApp(
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-            child: child,
+            child: child!,
           );
         },
         debugShowCheckedModeBanner: false,

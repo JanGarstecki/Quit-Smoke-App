@@ -11,7 +11,8 @@ const CHANNEL_DESC = "Reminders";
 class NotificationManager {
   static sendNotification({title, body}) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME, CHANNEL_DESC,
+        AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
+            channelDescription: CHANNEL_DESC,
             importance: Importance.max,
             priority: Priority.high,
             showWhen: false);
@@ -27,7 +28,8 @@ class NotificationManager {
 
   static periodicallyShow({title, body}) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME, CHANNEL_DESC);
+        AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
+            channelDescription: CHANNEL_DESC);
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.periodicallyShow(
@@ -52,8 +54,8 @@ class NotificationManager {
         'weekly scheduled notification body',
         _nextInstanceOfTenAM(),
         const NotificationDetails(
-          android: AndroidNotificationDetails(
-              CHANNEL_ID, CHANNEL_NAME, CHANNEL_DESC),
+          android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
+              channelDescription: CHANNEL_DESC),
         ),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
@@ -72,8 +74,8 @@ class NotificationManager {
         body,
         tz.TZDateTime.now(tz.local).add(const Duration(seconds: 20)),
         const NotificationDetails(
-            android: AndroidNotificationDetails(
-                CHANNEL_ID, CHANNEL_NAME, CHANNEL_DESC)),
+            android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
+                channelDescription: CHANNEL_DESC)),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
@@ -82,35 +84,7 @@ class NotificationManager {
   }
 
   static initializeLocalNotifiations() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    /// Note: permissions aren't requested here just to demonstrate that can be
-    /// done later
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-    const MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings(
-            requestAlertPermission: false,
-            requestBadgePermission: false,
-            requestSoundPermission: false);
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS,
-            macOS: initializationSettingsMacOS);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String payload) async {
-      if (payload != null) {
-        print('notification payload: $payload');
-      }
-    });
-
-    final bool result = await flutterLocalNotificationsPlugin
+    final bool? result = await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(

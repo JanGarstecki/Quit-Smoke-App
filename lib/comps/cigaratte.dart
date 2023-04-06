@@ -1,19 +1,20 @@
 import 'package:quitsmoke/static/htimes.dart';
+
 class Cigaratte {
   final DateTime startDate;
   final double pricePerCigaratte;
   final int dailyCigarattes;
   final String lang;
 
-  double cigarattePerSecond;
-  double moneyPerSecond;
+  late double cigarattePerSecond;
+  late double moneyPerSecond;
   double toUp = 0;
 
   Cigaratte(
-      {this.startDate,
-      this.pricePerCigaratte,
-      this.dailyCigarattes,
-      this.lang}) {
+      {required this.startDate,
+      required this.pricePerCigaratte,
+      required this.dailyCigarattes,
+      required this.lang}) {
     cigarattePerSecond = dailyCigarattes / (24 * 60 * 60.0);
     moneyPerSecond = cigarattePerSecond * pricePerCigaratte;
   }

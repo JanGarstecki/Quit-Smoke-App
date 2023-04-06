@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  WelcomeScreen({Key key}) : super(key: key);
+  WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -23,15 +23,15 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   List<String> reason = [];
-  String currentReason;
+  late String currentReason;
   String lang = "";
   final myController = TextEditingController();
   final myController2 = TextEditingController();
   final myController3 = TextEditingController();
-  double pricePerCigaratte;
-  int dailycigarattes;
+  late double pricePerCigaratte;
+  late int dailycigarattes;
   int index = 0;
-  String currency;
+  String? currency;
   final snapKey = GlobalKey<SnappableState>();
 
   @override
@@ -51,14 +51,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     setState(() {
       starting = true;
     });
-    snapKey.currentState.snap();
+    snapKey.currentState?.snap();
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     Future.delayed(Duration(seconds: 5), () {
       pref.setString("startTime", stopDate.toIso8601String());
       pref.setDouble("pricePerCigaratte", pricePerCigaratte);
       pref.setInt("dailycigarattes", dailycigarattes);
-      pref.setString("currency", currency);
+      pref.setString("currency", currency!);
       pref.setString("reason", jsonEncode(reason));
 
       Navigator.of(context).pushReplacement(
@@ -70,7 +70,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     switch (i) {
       case 0:
         return Container(
-          height: SizeConfig.screenHeight / 1.4,
+          height: SizeConfig.screenHeight! / 1.4,
           padding: EdgeInsets.all(25),
           child: Column(
             children: [
@@ -81,7 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               SizedBox(height: getProportionateScreenHeight(50)),
               Text(
                 langs[lang]["welcome"]["tellreason"],
-                style: Theme.of(context).textTheme.headline4.copyWith(
+                style: Theme.of(context).textTheme.headline4?.copyWith(
                     fontSize: getProportionateScreenWidth(22),
                     color: Colors.black.withAlpha(150)),
                 textAlign: TextAlign.center,
@@ -101,8 +101,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 children: [
                   TextButton(
                       onPressed: () {
-                        if (currentReason.trim() == "") return false;
-                        if (reason.contains(currentReason.trim())) return false;
+                        if (currentReason.trim() == "") return;
+                        if (reason.contains(currentReason.trim())) return;
                         reason.add(currentReason.trim());
                         currentReason = "";
                         myController.clear();
@@ -147,7 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 style: Theme.of(context)
                     .textTheme
                     .headline4
-                    .copyWith(fontSize: getProportionateScreenWidth(32)),
+                    ?.copyWith(fontSize: getProportionateScreenWidth(32)),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -197,7 +197,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2
-                        .copyWith(fontSize: getProportionateScreenWidth(26)),
+                        ?.copyWith(fontSize: getProportionateScreenWidth(26)),
                   ),
                   items: currencyList.map((Map value) {
                     return DropdownMenuItem<String>(
@@ -206,7 +206,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     );
                   }).toList(),
                   onChanged: (p) {
-                    currency = p;
+                    currency = p!;
                     setState(() {});
                   },
                 ),
@@ -229,11 +229,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   SizedBox(
                     width: 10,
                   ),
-                  Padding(padding: EdgeInsets.symmetric(horizontal: 20), child:
-                    OutlinedButton(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: OutlinedButton(
                       onPressed: () => _pickDate(context),
                       child: Text(langs[lang]["settings"]["change"]),
-                      style: OutlinedButton.styleFrom(side: BorderSide(color: Theme.of(context).primaryColor, width: 2)),
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor, width: 2)),
                     ),
                   ),
                 ],
@@ -248,6 +251,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             children: [
               Snappable(
                 key: snapKey,
+                onSnapped: () {},
                 child: Image.asset("./assets/images/cigarette.png",
                     width: getProportionateScreenWidth(200),
                     height: getProportionateScreenWidth(200)),
@@ -272,17 +276,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Container();
   }
 
-  DateTime stopDate;
+  late DateTime stopDate;
 
   _pickDate(BuildContext context) async {
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       firstDate: DateTime(DateTime.now().year - 5),
       lastDate: DateTime.now(),
       initialDate: stopDate,
     );
 
-    TimeOfDay t =
+    TimeOfDay? t =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (date != null && t != null)
       setState(() {
@@ -332,7 +336,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (index == 0 || starting) return false;
+                      if (index == 0 || starting) return;
                       setState(() {
                         index -= 1;
                       });
@@ -344,7 +348,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   IconButton(
                     onPressed: () {
-                      if (index == 2 || starting) return false;
+                      if (index == 2 || starting) return;
                       setState(() {
                         if (reason.length != 0 && index == 0 ||
                             (index == 1 &&

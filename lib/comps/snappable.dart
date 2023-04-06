@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as image;
+import 'package:screenshot/screenshot.dart';
 
 // GITHUB REPO: https://github.com/MarcinusX/snappable
 class Snappable extends StatefulWidget {
@@ -39,14 +40,14 @@ class Snappable extends StatefulWidget {
   final VoidCallback onSnapped;
 
   const Snappable({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.offset = const Offset(64, -32),
     this.duration = const Duration(milliseconds: 5000),
     this.randomDislocationOffset = const Offset(64, 32),
     this.numberOfBuckets = 16,
     this.snapOnTap = false,
-    this.onSnapped,
+    required this.onSnapped,
   }) : super(key: key);
 
   @override
@@ -62,19 +63,19 @@ class SnappableState extends State<Snappable>
   bool get isGone => _animationController.isCompleted;
 
   /// Main snap effect controller
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   /// Key to get image of a [widget.child]
   GlobalKey _globalKey = GlobalKey();
 
   /// Layers of image
-  List<Uint8List> _layers;
+  List<Uint8List>? _layers;
 
   /// Values from -1 to 1 to dislocate the layers a bit
-  List<double> _randoms;
+  late List<double> _randoms;
 
   /// Size of child widget
-  Size size;
+  late Size size;
 
   @override
   void initState() {
@@ -104,11 +105,11 @@ class SnappableState extends State<Snappable>
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          if (_layers != null) ..._layers.map(_imageToWidget),
+          if (_layers != null) ..._layers!.map(_imageToWidget),
           AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
-              return _animationController.isDismissed ? child : Container();
+              return _animationController.isDismissed ? child! : Container();
             },
             child: RepaintBoundary(
               key: _globalKey,
@@ -128,7 +129,7 @@ class SnappableState extends State<Snappable>
     //create an image for every bucket
     List<image.Image> _images = List<image.Image>.generate(
       widget.numberOfBuckets,
-      (i) => image.Image(fullImage.width, fullImage.height),
+      (i) => image.Image(width: fullImage.width, height: fullImage.height),
     );
 
     //for every line of pixels
@@ -147,7 +148,7 @@ class SnappableState extends State<Snappable>
       //for every pixel in a line
       for (int x = 0; x < fullImage.width; x++) {
         //get the pixel from fullImage
-        int pixel = fullImage.getPixel(x, y);
+        image.Pixel pixel = fullImage.getPixel(x, y);
         //choose a bucket for a pixel
         int imageIndex = _pickABucket(weights, sumOfWeights);
         //set the pixel from chosen bucket
@@ -183,10 +184,11 @@ class SnappableState extends State<Snappable>
 
   Widget _imageToWidget(Uint8List layer) {
     //get layer's index in the list
-    int index = _layers.indexOf(layer);
+    int index = _layers!.indexOf(layer);
 
     //based on index, calculate when this layer should start and end
-    double animationStart = (index / _layers.length) * _lastLayerAnimationStart;
+    double animationStart =
+        (index / _layers!.length) * _lastLayerAnimationStart;
     double animationEnd = animationStart + _singleLayerAnimationLength;
 
     //create interval animation using only part of whole animation
@@ -241,18 +243,49 @@ class SnappableState extends State<Snappable>
   /// Gets an Image from a [child] and caches [size] for later us
   Future<image.Image> _getImageFromWidget() async {
     RenderRepaintBoundary boundary =
-        _globalKey.currentContext.findRenderObject();
+        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     //cache image for later
     size = boundary.size;
     var img = await boundary.toImage();
     var byteData = await img.toByteData(format: ImageByteFormat.png);
-    var pngBytes = byteData.buffer.asUint8List();
+    var pngBytes = byteData!.buffer.asUint8List();
 
-    return image.decodeImage(pngBytes);
+    // var pngWithBackgorund = image.decodeImage(pngBytes)!;
+    // final list = pngWithBackgorund.data!.toUint8List();
+
+    // for (int i = 0, len = list.length; i < len; i += 4) {
+    //   if (list[i] == 0 && list[i + 1] == 0 && list[i + 2] == 0) {
+    //     list[i + 3] = 0;
+    //   }
+    //   pngWithBackgorund.
+    // }
+    // pngWithBackgorund.data = list
+    final png = image.decodeImage(pngBytes)!;
+    return await colorTransparent(png, 0, 0, 0);
   }
 
   int _gauss(double center, double value) =>
       (1000 * math.exp(-(math.pow((value - center), 2) / 0.14))).round();
+
+  Future<Uint8List> removeWhiteBackground(Uint8List bytes) async {
+    image.Image img = image.decodeImage(bytes)!;
+    image.Image transparentImage = await colorTransparent(img, 0, 0, 0);
+    var newPng = image.encodePng(transparentImage);
+    return newPng;
+  }
+
+  Future<image.Image> colorTransparent(
+      image.Image src, int red, int green, int blue) async {
+    var pixels = src.getBytes();
+    for (int i = 0, len = pixels.length; i < len; i += 4) {
+      if (pixels[i] == red && pixels[i + 1] == green && pixels[i + 2] == blue) {
+        pixels[i + 3] = 0;
+        src.setPixelRgba((i / 4 % src.width).toInt(), i / 4 ~/ src.height, red,
+            green, blue, 0);
+      }
+    }
+    return src;
+  }
 }
 
 /// This is slow! Run it in separate isolate
