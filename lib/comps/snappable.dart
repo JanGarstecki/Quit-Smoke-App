@@ -1,14 +1,12 @@
 library snappable;
 
 import 'dart:math' as math;
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as image;
-import 'package:screenshot/screenshot.dart';
 
 // GITHUB REPO: https://github.com/MarcinusX/snappable
 class Snappable extends StatefulWidget {
@@ -129,7 +127,8 @@ class SnappableState extends State<Snappable>
     //create an image for every bucket
     List<image.Image> _images = List<image.Image>.generate(
       widget.numberOfBuckets,
-      (i) => image.Image(width: fullImage.width, height: fullImage.height),
+      (i) => image.Image(
+          width: fullImage.width, height: fullImage.height, numChannels: 4),
     );
 
     //for every line of pixels
@@ -250,29 +249,12 @@ class SnappableState extends State<Snappable>
     var byteData = await img.toByteData(format: ImageByteFormat.png);
     var pngBytes = byteData!.buffer.asUint8List();
 
-    // var pngWithBackgorund = image.decodeImage(pngBytes)!;
-    // final list = pngWithBackgorund.data!.toUint8List();
-
-    // for (int i = 0, len = list.length; i < len; i += 4) {
-    //   if (list[i] == 0 && list[i + 1] == 0 && list[i + 2] == 0) {
-    //     list[i + 3] = 0;
-    //   }
-    //   pngWithBackgorund.
-    // }
-    // pngWithBackgorund.data = list
     final png = image.decodeImage(pngBytes)!;
     return await colorTransparent(png, 0, 0, 0);
   }
 
   int _gauss(double center, double value) =>
       (1000 * math.exp(-(math.pow((value - center), 2) / 0.14))).round();
-
-  Future<Uint8List> removeWhiteBackground(Uint8List bytes) async {
-    image.Image img = image.decodeImage(bytes)!;
-    image.Image transparentImage = await colorTransparent(img, 0, 0, 0);
-    var newPng = image.encodePng(transparentImage);
-    return newPng;
-  }
 
   Future<image.Image> colorTransparent(
       image.Image src, int red, int green, int blue) async {
