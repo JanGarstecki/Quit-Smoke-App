@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     super.initState();
     Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {});
+      safeSetState();
     });
     Random rnd = new Random();
     int rndInt = rnd.nextInt(langs[lang]["tipsandfacts"].length);
@@ -62,18 +62,24 @@ class _HomeScreenState extends State<HomeScreen> {
     tipOpacity = 1;
     Timer(Duration(seconds: 8), () {
       tipOpacity = 0;
-      setState(() {});
+      safeSetState();
     });
     Timer.periodic(Duration(seconds: 10), (timer) {
       tipOpacity = 1;
       tiptext = langs[lang]["tipsandfacts"]
           [rnd.nextInt(langs[lang]["tipsandfacts"].length)];
-      setState(() {});
+      safeSetState();
       Timer(Duration(seconds: 8), () {
         tipOpacity = 0;
-        setState(() {});
+        safeSetState();
       });
     });
+  }
+
+  void safeSetState() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   showAlertDialog(BuildContext context) {
@@ -188,6 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Text(
                           '${langs[lang]["home"]["day"].toUpperCase()} ${cigaraManager!.calculatePassedTime().inDays + 1}',
+                          key: Key('text'),
                           style: TextStyle(
                             fontSize: getProportionateScreenWidth(26),
                             fontWeight: FontWeight.bold,

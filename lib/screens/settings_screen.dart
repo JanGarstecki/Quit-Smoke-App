@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:quitsmoke/comps/getlang.dart';
 import 'package:quitsmoke/static/currencies.dart';
