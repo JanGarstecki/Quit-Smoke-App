@@ -249,25 +249,11 @@ class SnappableState extends State<Snappable>
     var byteData = await img.toByteData(format: ImageByteFormat.png);
     var pngBytes = byteData!.buffer.asUint8List();
 
-    final png = image.decodeImage(pngBytes)!;
-    return await colorTransparent(png, 0, 0, 0);
+    return image.decodeImage(pngBytes)!;
   }
 
   int _gauss(double center, double value) =>
       (1000 * math.exp(-(math.pow((value - center), 2) / 0.14))).round();
-
-  Future<image.Image> colorTransparent(
-      image.Image src, int red, int green, int blue) async {
-    var pixels = src.getBytes();
-    for (int i = 0, len = pixels.length; i < len; i += 4) {
-      if (pixels[i] == red && pixels[i + 1] == green && pixels[i + 2] == blue) {
-        pixels[i + 3] = 0;
-        src.setPixelRgba((i / 4 % src.width).toInt(), i / 4 ~/ src.height, red,
-            green, blue, 0);
-      }
-    }
-    return src;
-  }
 }
 
 /// This is slow! Run it in separate isolate
