@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             FittedBox(
               child: DropdownButton<String>(
-                value: currency ?? null,
+                value: currency,
                 hint: Text(
                   langs[lang]["welcome"]["choosecurrency"],
                   style: Theme.of(context)

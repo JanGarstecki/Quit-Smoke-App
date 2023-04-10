@@ -376,7 +376,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                     item.description != "" &&
                                     item.description.length > 2)
                                   Text(
-                                    item.description ?? "",
+                                    item.description,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4
