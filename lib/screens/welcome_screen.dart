@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quitsmoke/comps/getlang.dart';
 import 'package:quitsmoke/comps/snappable.dart';
-import 'package:quitsmoke/patrol_keys.dart';
 import 'package:quitsmoke/size_config.dart';
 import 'package:quitsmoke/static/currencies.dart';
 import 'package:quitsmoke/static/lang.dart';
@@ -89,7 +88,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(15),
               ),
               TextField(
-                key: K.quittingReasonTextField,
                 controller: myController,
                 textAlign: TextAlign.center,
                 maxLines: 1,
@@ -100,7 +98,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Column(
                 children: [
                   TextButton(
-                      key: K.addReasonButton,
                       onPressed: () {
                         if (currentReason.trim() == "") return;
                         if (reason.contains(currentReason.trim())) return;
@@ -155,7 +152,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(55),
               ),
               TextFormField(
-                key: K.cigarattesAmountTextField,
                 controller: myController2,
                 onChanged: (value) => dailycigarattes = int.parse(value),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -174,7 +170,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(15),
               ),
               TextFormField(
-                key: K.cigarattesPriceTextField,
                 controller: myController3,
                 onChanged: (value) => pricePerCigaratte =
                     double.parse(value.replaceAll(",", ".")),
@@ -194,7 +189,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               FittedBox(
                 child: DropdownButton<String>(
-                  key: K.currencyDropdown,
                   value: currency ?? null,
                   hint: Text(
                     langs[lang]["welcome"]["choosecurrency"],
@@ -269,7 +263,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   showTwoGlows: false,
                   repeatPauseDuration: Duration(milliseconds: 100),
                   child: ElevatedButton(
-                    key: K.startNowButton,
                     child: Text(langs[lang]["welcome"]["start"]),
                     onPressed: () => _startNow(),
                   ),
@@ -350,7 +343,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   IconButton(
-                    key: K.nextButton,
                     onPressed: () {
                       if (index == 2 || starting) return;
                       setState(() {
