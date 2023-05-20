@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quitsmoke/comps/getlang.dart';
 import 'package:quitsmoke/comps/snappable.dart';
+import 'package:quitsmoke/patrol_keys.dart';
 import 'package:quitsmoke/size_config.dart';
 import 'package:quitsmoke/static/currencies.dart';
 import 'package:quitsmoke/static/lang.dart';
@@ -88,6 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(15),
               ),
               TextField(
+                key: PatrolKeys.quitingReasonTextField,
                 controller: myController,
                 textAlign: TextAlign.center,
                 maxLines: 1,
@@ -98,6 +100,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Column(
                 children: [
                   TextButton(
+                      key: K.addToListButton,
                       onPressed: () {
                         if (currentReason.trim() == "") return;
                         if (reason.contains(currentReason.trim())) return;
@@ -152,6 +155,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(55),
               ),
               TextFormField(
+                key: PatrolKeys.numOfCigsTextField,
                 controller: myController2,
                 onChanged: (value) => dailycigarattes = int.parse(value),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -343,6 +347,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   IconButton(
+                    key: PatrolKeys.mainPaigeNextButton,
                     onPressed: () {
                       if (index == 2 || starting) return;
                       setState(() {
