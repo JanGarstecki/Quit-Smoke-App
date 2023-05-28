@@ -174,6 +174,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 height: getProportionateScreenHeight(15),
               ),
               TextFormField(
+                key: PatrolKeys.costTextField,
                 controller: myController3,
                 onChanged: (value) => pricePerCigaratte =
                     double.parse(value.replaceAll(",", ".")),
@@ -193,6 +194,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               FittedBox(
                 child: DropdownButton<String>(
+                  key: PatrolKeys.chooseCurrencyDropdown,
                   value: currency ?? null,
                   hint: Text(
                     langs[lang]["welcome"]["choosecurrency"],
@@ -203,6 +205,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   items: currencyList.map((Map value) {
                     return DropdownMenuItem<String>(
+                      key: Key(value["name"]),
                       value: value["symbol"],
                       child: new Text("${value["name"]} ${value["symbol"]}"),
                     );
@@ -234,6 +237,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: OutlinedButton(
+                      key: PatrolKeys.changeDateButton,
                       onPressed: () => _pickDate(context),
                       child: Text(langs[lang]["settings"]["change"]),
                       style: OutlinedButton.styleFrom(
@@ -267,6 +271,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   showTwoGlows: false,
                   repeatPauseDuration: Duration(milliseconds: 100),
                   child: ElevatedButton(
+                    key: PatrolKeys.startNowButton,
                     child: Text(langs[lang]["welcome"]["start"]),
                     onPressed: () => _startNow(),
                   ),

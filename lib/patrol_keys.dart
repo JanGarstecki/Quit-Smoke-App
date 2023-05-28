@@ -8,4 +8,7 @@ class PatrolKeys {
   static const mainPaigeNextButton = Key('mainPaigeNextButton');
   static const numOfCigsTextField = Key('numOfCigsTextField');
   static const costTextField = Key('costTextField');
+  static const chooseCurrencyDropdown = Key('chooseCurrencyDropdown');
+  static const changeDateButton = Key('changeDateButton');
+  static const startNowButton = Key('startNowButton');
 }
