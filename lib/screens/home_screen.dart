@@ -523,6 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
       required String id,
       required Function()? onTap}) {
     return InkWell(
+      key: Key(id),
       onTap: onTap,
       child: Ink(
         padding: EdgeInsets.symmetric(

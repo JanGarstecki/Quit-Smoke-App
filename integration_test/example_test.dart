@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 import 'package:quitsmoke/main.dart';
 import 'package:quitsmoke/patrol_keys.dart';
@@ -36,8 +34,9 @@ void main() {
       await $(TextField).enterText('01/07/2020');
       await $(RegExp('OK')).tap();
       await $(RegExp('OK')).tap();
-      await $(K.mainPaigeNextButton).scrollTo().tap();
-      await $(K.startNowButton).tap();
+      await $(K.mainPaigeNextButton).scrollTo().tap(andSettle: true);
+      await $(K.startNowButton).tap(andSettle: true);
+      await $(Key('wallet')).tap();
     },
   );
 }
