@@ -50,8 +50,14 @@ android {
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
     }
+
+    testOptions {
+    execution "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+
+
 signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']
@@ -76,4 +82,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation "junit:junit:4.13.2"
+    androidTestUtil "androidx.test:orchestrator:1.4.2"
 }
